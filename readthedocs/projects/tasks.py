@@ -68,7 +68,7 @@ def update_docs(pk, record=True, pdf=True, man=True, epub=True, version_pk=None,
     else:
         branch = project.default_branch or project.vcs_repo().fallback_branch
         version, created = Version.objects.get_or_create(
-            project=project, slug='latest')
+            project=project, slug='latest', defaults={'verbose_name': 'latest'})
         if not version.active:
             version.active = True
             version.save()
@@ -234,7 +234,7 @@ def scrape_conf_file(version):
         conf_file = project.conf_file(version.slug)
     except IndexError:
         print("Could not find conf.py in %s" % project)
-        return -1
+        return - 1
     else:
         conf_dir = conf_file.replace('/conf.py', '')
 
