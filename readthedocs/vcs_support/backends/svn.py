@@ -40,11 +40,15 @@ class Backend(BaseVCS):
                 "Failed to get code from '%s' (svn up): %s" % (self.repo_url, retcode)
             )
 
-    def co(self):
-        retcode = self.run('svn', 'checkout', '--trust-server-cert', '--non-interactive', self.repo_url, '.')[0]
+    def co(self, identifier=None):
+        if identifier:
+            url = self.base_url + identifier
+        else:
+            url = self.repo_url
+        retcode = self.run('svn', 'checkout', '--trust-server-cert', '--non-interactive', url, '.')[0]
         if retcode != 0:
             raise ProjectImportError(
-                "Failed to get code from '%s' (svn checkout): %s" % (self.repo_url, retcode)
+                "Failed to get code from '%s' (svn checkout): %s" % (url, retcode)
             )
 
     @property
@@ -80,4 +84,4 @@ class Backend(BaseVCS):
         if retcode == 0:
             self.up()
         else:
-            self.co()
+            self.co(identifier)
