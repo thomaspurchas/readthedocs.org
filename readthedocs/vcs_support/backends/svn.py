@@ -75,7 +75,7 @@ class Backend(BaseVCS):
         raw_tags = csv.reader(StringIO(data), delimiter='/')
         vcs_tags = []
         for name, _ in raw_tags:
-            vcs_tags.append(VCSVersion(self, '/tags/%s/' % name, name))
+            vcs_tags.append(VCSVersion(self, '/tags/%s/' % name, name.replace(' ', '')))
         return vcs_tags
 
     def checkout(self, identifier=None):
