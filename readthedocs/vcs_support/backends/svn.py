@@ -34,14 +34,14 @@ class Backend(BaseVCS):
             raise ProjectImportError(
                 "Failed to get code from '%s' (svn revert): %s" % (self.repo_url, retcode)
             )
-        retcode = self.run('svn', 'up', '--accept', 'theirs-full')[0]
+        retcode = self.run('svn', 'up', '--accept', 'theirs-full', '--trust-server-cert', '--non-interactive')[0]
         if retcode != 0:
             raise ProjectImportError(
                 "Failed to get code from '%s' (svn up): %s" % (self.repo_url, retcode)
             )
 
     def co(self):
-        retcode = self.run('svn', 'checkout', '--quiet', self.repo_url, '.')[0]
+        retcode = self.run('svn', 'checkout', '--trust-server-cert', '--non-interactive', self.repo_url, '.')[0]
         if retcode != 0:
             raise ProjectImportError(
                 "Failed to get code from '%s' (svn checkout): %s" % (self.repo_url, retcode)
@@ -70,7 +70,7 @@ class Backend(BaseVCS):
 
         raw_tags = csv.reader(StringIO(data), delimiter='/')
         vcs_tags = []
-        for name, in raw_tags:
+        for name, _ in raw_tags:
             vcs_tags.append(VCSVersion(self, '/tags/%s/' % name, name))
         return vcs_tags
 
