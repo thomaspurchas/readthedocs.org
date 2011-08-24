@@ -83,6 +83,7 @@ def update_docs(pk, record=True, pdf=True, man=True, epub=True, version_pk=None,
     else:
         #Create or use the 'latest' branch, which is the default for a project.
         branch = project.default_branch or project.vcs_repo().fallback_branch
+<<<<<<< HEAD
         try:
             version_data = api.version(project.slug).get(slug='latest')['objects'][0]
             del version_data['resource_uri']
@@ -313,7 +314,7 @@ def scrape_conf_file(version):
         conf_file = project.conf_file(version.slug)
     except IndexError:
         print("Could not find conf.py in %s" % project)
-        return -1
+        return - 1
     else:
         conf_dir = conf_file.replace('/conf.py', '')
 
