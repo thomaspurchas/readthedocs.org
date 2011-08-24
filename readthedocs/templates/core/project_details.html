@@ -29,18 +29,17 @@
   {% for version in project.ordered_active_versions %}
       <div style="float: left; margin-right: 5px;" class="version_right">
         <form method="post" action="{% url generic_build project.pk %}">
-            <input type="hidden" name="version_slug" value="{{version.verbose_name}}">
+            <input type="hidden" name="version_slug" value="{{version.slug}}">
             <input style="border: none; padding: 2px;" type="image" value="submit" src="{{ MEDIA_URL}}images/build.png" height="15"  alt="Build!" title="Build Version" name="image">
         </form>
       </div>
       <div style="float: left;" class="version_left">
       {% if version.uploaded or version.built %}
         {# Link to the docs #}
-        <a href="{{ version.get_absolute_url }}">{{ version.slug }}</a>
+        <a href="{{ version.get_absolute_url }}">{{ version.verbose_name }}</a>
       {% else %}
-        {{ version.slug }} (Build Failed)
+        {{ version.verbose_name }}(Build Failed)
       {% endif %}
-
       </div>
       <div style="clear: both;"></div>
   {% endfor %}
