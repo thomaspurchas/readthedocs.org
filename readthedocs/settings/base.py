@@ -6,25 +6,26 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('Charlie Leifer', 'coleifer@gmail.com'),
-    ('Eric Holscher', 'eric@ericholscher.com'),
+    ('Thomas Purchas', 'security@testsvn'),
 )
 
 MANAGERS = ADMINS
+
+SEND_BROKEN_LINK_EMAILS = True
 
 SITE_ROOT = '/'.join(os.path.dirname(__file__).split('/')[0:-2])
 DOCROOT = os.path.join(SITE_ROOT, 'user_builds')
 UPLOAD_ROOT = os.path.join(SITE_ROOT, 'user_uploads')
 
 MEDIA_ROOT = '%s/media/' % (SITE_ROOT)
-MEDIA_URL = '/media/'
-ADMIN_MEDIA_PREFIX = '/media/admin/'
+MEDIA_URL = '/docs/media/'
+ADMIN_MEDIA_PREFIX = 'http://media.readthedocs.org/admin/'
 
 CACHE_BACKEND = 'memcached://localhost:11211/'
 CACHE_KEY_PREFIX = 'docs'
 CACHE_MIDDLEWARE_SECONDS = 60
 
-LOGIN_REDIRECT_URL = '/dashboard/'
+LOGIN_REDIRECT_URL = '/docs/dashboard/'
 FORCE_WWW = False
 #APPEND_SLASH = False
 
@@ -84,6 +85,7 @@ INSTALLED_APPS = (
     'pagination',
     'registration',
     'djcelery',
+    'djkombu',
     'taggit',
     'south',
     'django_extensions',
@@ -104,15 +106,13 @@ INSTALLED_APPS = (
     'editor',
     'rtd_tests',
 )
-
-
-CARROT_BACKEND = "ghettoq.taproot.Database"
+BROKER_TRANSPORT = 'django'
 CELERY_ALWAYS_EAGER = True
 CELERYD_TASK_TIME_LIMIT = 60*60 #60 minutes
 
-
 DEFAULT_FROM_EMAIL = "no-reply@readthedocs.org"
 SESSION_COOKIE_DOMAIN = 'readthedocs.org'
+SESSION_COOKIE_DOMAIN = None
 
 HAYSTACK_SITECONF = 'core.search_sites'
 HAYSTACK_SEARCH_ENGINE = 'simple'
@@ -122,7 +122,7 @@ AUTH_PROFILE_MODULE = "core.UserProfile"
 SOUTH_TESTS_MIGRATE = False
 
 ABSOLUTE_URL_OVERRIDES = {
-    'auth.user': lambda o: "/profiles/%s/" % o.username
+    'auth.user': lambda o: "/docs/profiles/%s/" % o.username
 }
 
 INTERNAL_IPS = ('127.0.0.1',)
