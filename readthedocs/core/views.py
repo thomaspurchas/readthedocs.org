@@ -148,6 +148,11 @@ def serve_docs(request, lang_slug, version_slug, filename, project_slug=None):
                                              'rtd-builds',
                                              version_slug,
                                              filename)
+            response['X-Sendfile'] = os.path.join('/projects/readthedocs/checkouts/readthedocs.org/user_builds',
+                                             proj.slug,
+                                             'rtd-builds',
+                                             version_slug,
+                                             filename)
         except UnicodeEncodeError:
             raise Http404
 
