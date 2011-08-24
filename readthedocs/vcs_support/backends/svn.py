@@ -53,7 +53,7 @@ class Backend(BaseVCS):
 
     @property
     def tags(self):
-        retcode, stdout = self.run('svn', 'list', '%s/tags/' % self.base_url)[:2]
+        retcode, stdout = self.run('svn', 'list', '--trust-server-cert', '--non-interactive', '%s/tags/' % self.base_url)[:2]
         # error (or no tags found)
         if retcode != 0:
             return []
