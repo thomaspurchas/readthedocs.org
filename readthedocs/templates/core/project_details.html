@@ -29,7 +29,7 @@
   {% for version in project.ordered_active_versions %}
       <div style="float: left; margin-right: 5px;" class="version_right">
         <form method="post" action="{% url generic_build project.pk %}">
-            <input type="hidden" name="version_slug" value="{{version.slug}}">
+            <input type="hidden" name="version_slug" value="{{version.verbose_name}}">
             <input style="border: none; padding: 2px;" type="image" value="submit" src="{{ MEDIA_URL}}images/build.png" height="15"  alt="Build!" title="Build Version" name="image">
         </form>
       </div>
