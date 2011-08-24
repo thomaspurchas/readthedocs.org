@@ -7,7 +7,7 @@ class Version(models.Model):
     project = models.ForeignKey(Project, related_name='versions')
     identifier = models.CharField(max_length=255) # used by the vcs backend
     verbose_name = models.CharField(max_length=255)
-    slug = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255)
     active = models.BooleanField(default=False)
     built = models.BooleanField(default=False)
     uploaded = models.BooleanField(default=False)
@@ -33,8 +33,8 @@ class Version(models.Model):
 
 class VersionAlias(models.Model):
     project = models.ForeignKey(Project, related_name='aliases')
-    from_slug = models.CharField(max_length=255, default='')
-    to_slug = models.CharField(max_length=255, default='', blank=True)
+    from_slug = models.SlugField(max_length=255, default='')
+    to_slug = models.SlugField(max_length=255, default='', blank=True)
     largest = models.BooleanField(default=False)
 
     def __unicode__(self):

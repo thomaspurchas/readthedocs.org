@@ -10,6 +10,7 @@ from distutils2.version import NormalizedVersion, suggest_normalized_version
 from django.conf import settings
 from httplib2 import Http
 import redis
+from django.template.defaultfilters import slugify
 
 from projects.libs.diff_match_patch import diff_match_patch
 
@@ -82,6 +83,7 @@ def safe_write(filename, contents):
 CUSTOM_SLUG_RE = re.compile(r'[^-._\w]+$')
 
 def _custom_slugify(data):
+    data = slugify(data)
     return CUSTOM_SLUG_RE.sub('', data)
 
 def slugify_uniquely(model, initial, field, max_length, **filters):
@@ -91,13 +93,13 @@ def slugify_uniquely(model, initial, field, max_length, **filters):
     base_qs = model.objects.filter(**filters)
     while base_qs.filter(**{field: current}).exists():
         suffix = '-%s' % index
-        current = '%s%s'  % (slug[:-len(suffix)], suffix)
+        current = '%s%s' % (slug[:-len(suffix)], suffix)
         index += 1
     return current
 
 def mkversion(version_obj):
     try:
-        ver =  NormalizedVersion(suggest_normalized_version(version_obj.slug))
+        ver = NormalizedVersion(suggest_normalized_version(version_obj.slug))
         return ver
     except TypeError:
         return None
