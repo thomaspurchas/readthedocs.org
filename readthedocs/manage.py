@@ -1,5 +1,5 @@
 #!/usr/bin/env python
 
-import settings.sqlite
+import settings.postgres
 from django.core.management import execute_manager
-execute_manager(settings.sqlite)
+execute_manager(settings.postgres)
