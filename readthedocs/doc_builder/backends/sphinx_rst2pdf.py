@@ -32,7 +32,7 @@ class Builder(HtmlBuilder):
                                'pdf',
                                project.slug,
                                self.version.slug)
-        from_file = os.path.join(outputted_path, "*.pdf")
+        from_file = os.path.join(outputted_path, "%s.pdf" % self.version.slug)
         to_file = os.path.join(to_path, "%s.pdf" % project.slug)
         if getattr(settings, "MULTIPLE_APP_SERVERS", None):
             copy_file_to_app_servers(from_file, to_file)
