@@ -16,3 +16,4 @@ readthedocs/rtd_tests/tests/builds
 deploy/.vagrant
 .project
 .pydevproject
+.settings
