@@ -45,5 +45,5 @@ class Builder(HtmlBuilder):
             # Get a list of files that match the wildcard, and then only move
             # the first one. Seems to be more reliable than mv command.
             from_files = glob.glob(from_file)
-            if len(from_file):
+            if len(from_files):
                 shutil.move(from_files[0], to_file)

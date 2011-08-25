@@ -14,7 +14,7 @@ class Builder(ManpageBuilder):
     @restoring_chdir
     def build(self):
         project = self.version.project
-        os.chdir(self.version.project.conf_dir(self.version.slug))
+        os.chdir(project.conf_dir(self.version.slug))
         if project.use_virtualenv and project.whitelisted:
             build_command = '%s -b man  -d _build/doctrees . _build/man' % project.venv_bin(
                 version=self.version.slug, bin='sphinx-build')
@@ -44,5 +44,5 @@ class Builder(ManpageBuilder):
             # Get a list of files that match the wildcard, and then only move
             # the first one. Seems to be more reliable than mv command.
             from_files = glob.glob(from_file)
-            if len(from_file):
+            if len(from_files):
                 shutil.move(from_files[0], to_file)
