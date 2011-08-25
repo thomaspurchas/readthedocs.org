@@ -327,11 +327,13 @@ def build_docs(project, version, pdf, man, epub, record, force, update_output={}
             #pdf_builder.move(version)
         if man:
             man_builder = builder_loading.get('sphinx_man')(version)
-            man_builder.build()
+            result = man_builder.build()
+            print result
             man_builder.move()
         if epub:
             epub_builder = builder_loading.get('sphinx_epub')(version)
-            epub_builder.build()
+            result = epub_builder.build()
+            print result
             epub_builder.move()
     return html_output
 
