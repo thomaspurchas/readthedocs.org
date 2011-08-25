@@ -1,4 +1,6 @@
 import os
+import glob
+import shutil
 from doc_builder.base import restoring_chdir
 from doc_builder.backends.sphinx import Builder as HtmlBuilder
 from projects.utils import run
@@ -40,4 +42,5 @@ class Builder(HtmlBuilder):
             if os.path.exists(to_file):
                 os.unlink(to_file)
 
-            os.rename(from_file, to_file)
+            from_file = glob.glob(from_file)[0]
+            shutil.move(from_file, to_file)
