@@ -1,6 +1,6 @@
 import os, sys
 
-sys.stdout = sys.stderr
+#sys.stdout = sys.stderr
 
 ALLDIRS = ['/projects/readthedocs/lib/python2.6/site-packages']
 import site 
