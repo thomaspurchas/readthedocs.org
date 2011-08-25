@@ -37,4 +37,4 @@ class Builder(ManpageBuilder):
         else:
             if not os.path.exists(to_path):
                 os.makedirs(to_path)
-            run('mv -f %s %s' % (from_file, to_file))
+            print run('mv -f %s %s' % (from_file, to_file))
