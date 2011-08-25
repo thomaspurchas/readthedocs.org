@@ -50,6 +50,7 @@ class Builder(BaseBuilder):
                     run('mv -f %s %s' % (from_file, to_file))
         else:
             print "PDF Building failed. Moving on."
+            print latex_results
         return latex_results
 
 
