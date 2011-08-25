@@ -47,3 +47,5 @@ class Builder(HtmlBuilder):
             from_files = glob.glob(from_file)
             if len(from_files):
                 shutil.move(from_files[0], to_file)
+            else:
+                print "Failed to move epub file"
