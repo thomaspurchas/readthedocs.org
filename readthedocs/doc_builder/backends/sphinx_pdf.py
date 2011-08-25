@@ -1,6 +1,7 @@
 from glob import glob
 import re
 import os
+import shutil
 
 from django.conf import settings
 
@@ -47,7 +48,17 @@ class Builder(BaseBuilder):
                 else:
                     if not os.path.exists(to_path):
                         os.makedirs(to_path)
-                    run('mv -f %s %s' % (from_file, to_file))
+                    if os.path.exists(to_file):
+                        os.unlink(to_file)
+
+                    # Get a list of files that match the wildcard, and then only
+                    # move the first one. Seems to be more reliable than mv
+                    # command.
+                    from_files = glob(from_file)
+                    if len(from_files):
+                        shutil.move(from_files[0], to_file)
+                    else:
+                        print "Failed to move pdf file"
         else:
             print "PDF Building failed. Moving on."
         return latex_results
