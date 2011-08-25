@@ -1,5 +1,6 @@
 import os
-
+import glob
+import shutil
 from django.conf import settings
 
 from doc_builder.base import restoring_chdir
@@ -37,4 +38,11 @@ class Builder(ManpageBuilder):
         else:
             if not os.path.exists(to_path):
                 os.makedirs(to_path)
-            print run('mv -f %s %s' % (from_file, to_file))
+            if os.path.exists(to_file):
+                os.unlink(to_file)
+
+            # Get a list of files that match the wildcard, and then only move
+            # the first one. Seems to be more reliable than mv command.
+            from_files = glob.glob(from_file)
+            if len(from_file):
+                shutil.move(from_files[0], to_file)
