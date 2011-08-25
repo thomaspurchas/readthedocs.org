@@ -323,8 +323,8 @@ def build_docs(project, version, pdf, man, epub, record, force, update_output={}
         if pdf:
             pdf_builder = builder_loading.get('sphinx_pdf')(version)
             pdf_builder.build()
-            #PDF Builder is oddly 2-steped, and stateful for now
-            #pdf_builder.move(version)
+            # We are using the rst2pdf builder this time
+            pdf_builder.move()
         if man:
             man_builder = builder_loading.get('sphinx_man')(version)
             man_result = man_builder.build()
