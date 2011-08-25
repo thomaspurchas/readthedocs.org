@@ -37,4 +37,7 @@ class Builder(HtmlBuilder):
         else:
             if not os.path.exists(to_path):
                 os.makedirs(to_path)
-            print run('mv -f %s %s' % (from_file, to_file))
+            if os.path.exists(to_file):
+                os.unlink(to_file)
+
+            os.rename(from_file, to_file)
