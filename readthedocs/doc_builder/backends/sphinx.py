@@ -52,7 +52,7 @@ context = {
     'current_version': "{{ current_version.slug }}",
     'MEDIA_URL': "{{ settings.MEDIA_URL }}",
     'versions': [{% for version in versions|sort_version_aware %}
-    ("{{ version.slug }}", "{{ version.absolute_url }}"),{% endfor %}
+    ("{{ version.verbose_name }}", "{{ version.absolute_url }}"),{% endfor %}
     ],
     'slug': '{{ project.slug }}',
     'name': u'{{ project.name }}',
@@ -133,7 +133,7 @@ class Builder(BaseBuilder):
             for file in files:
                 to_write = os.path.join(root, file)
                 archive.write(
-                    filename=to_write, 
+                    filename=to_write,
                     arcname=os.path.join("%s-%s" % (self.version.project.slug, self.version.slug), to_write)
                 )
         archive.close()
