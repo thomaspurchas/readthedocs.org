@@ -11,8 +11,13 @@
     <ul class="module-item-menu">
       {% if project.has_good_build %}
         <span class="hidden-child" style="display: none;">
+<<<<<<< HEAD
             {% for version in project.ordered_active_versions reversed %}
                 <li><a href="{{ version.get_absolute_url }}">{{ version.slug }}</a></li>
+=======
+            {% for version in project.active_versions reversed %}
+                <li><a href="{{ version.get_absolute_url }}">{{ version.verbose_name }}</a></li>
+>>>>>>> 9f732c0... Updated the homepage lists to use the verbose_name's of versions in a popout lists.
             {% endfor %}
         </span>
         <li><a href="{{ project.get_docs_url }}">View Docs</a></li>
