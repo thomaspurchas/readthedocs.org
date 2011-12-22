@@ -4,6 +4,7 @@
 doc_root
 user_uploads
 user_builds
+cnames
 local_settings.py
 _build
 media/pdf
@@ -14,6 +15,10 @@ xml_output
 locks/*
 readthedocs/rtd_tests/tests/builds
 deploy/.vagrant
+<<<<<<< HEAD
 .project
 .pydevproject
 .settings
+=======
+rtd.log*
+>>>>>>> ec9594c536a6be8a0c1067c7b3af2a6fc8e954e0

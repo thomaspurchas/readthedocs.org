@@ -18,6 +18,7 @@
         <!-- <input type="submit" value="Go"> -->
     </form>
 </div>
+<br>
 <!-- BEGIN search bar -->
 
 
@@ -60,6 +61,16 @@
 {% endif %}
 -->
 
+{% if project.subprojects.exists %}
+  <h3>Sub Projects</h3>
+    <ul>
+    {% for rel in project.subprojects.all %}
+        <li><a href="{{ rel.get_absolute_url }}">{{ rel.child }}</a></li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+
 <h3>Last Built</h3>
 <p>{{ project.modified_date|timesince }} ago</p>
 
@@ -92,16 +103,14 @@
 </ul>
 {% endif %}
 
-{% if request.user == project.user %}
+{% if request.user in project.users.all %}
   <h3>Post Commit Hook</h3>
     <p>http://readthedocs.org{% url generic_build project.pk %}</p>
+{% endif %}
 
 <form method="post" action="{% url generic_build project.pk %}">
   <input type="submit" value="Build latest version">
 </form>
-
-{% endif %}
-
 
 {% if pageview_list %}
 <!-- BEGIN projects list -->
@@ -125,6 +134,6 @@
 <!-- END projects list -->
 {% endif %}
 
-{% if request.user != project.user %}
+{% if request.user not in project.users.all %}
   {% include "projects/includes/flagging.html" %}
 {% endif %}

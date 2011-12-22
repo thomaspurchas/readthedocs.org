@@ -34,6 +34,11 @@
                           {% if project.has_aliases %}
                             <li><a href="{% url projects_alias_list project.slug %}" rel="nofollow,noindex">Aliases</a></li>
                         {% endif %}
+                       
+                            {% comment %}
+                          <li><a href="{% url projects_subprojects project.slug %}">Subprojects</a></li>
+                            {% endcomment %}
+
                           <li><a href="{% url projects_edit project.slug %}">Edit</a></li>
                           <li><a href="{{ project.get_docs_url }}">View Docs</a></li>
                         </ul>
@@ -47,7 +52,7 @@
             </div>
           </div>
           {% else %}
-          <p class="empty">You don't have any projects.  You can <a href="{% url projects_create %}">create new docs</a> on the site, or <a href="{% url projects_import %}">import docs</a> from a public repo. <br>
+          <p class="empty">You don't have any projects.  You should <a href="{% url projects_import %}">create new docs</a> on the site.<br>
            Check out the <a href="http://readthedocs.org/docs/read-the-docs/latest/getting_started.html">Getting Started</a> documentation for information about how to get going.</p>
           {% endif %}
           <!-- END your projects list -->

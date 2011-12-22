@@ -1,3 +1,5 @@
+import logging
+
 from django.core.paginator import Paginator, InvalidPage
 from django.contrib.auth.models import User
 from django.conf.urls.defaults import url
@@ -15,44 +17,48 @@ from tastypie.exceptions import NotFound
 from tastypie.http import HttpCreated
 from tastypie.utils import dict_strip_unicode_keys, trailing_slash
 
-
 from builds.models import Build, Version
 from projects.models import Project, ImportedFile
 from projects.utils import highest_version, mkversion
 
+log = logging.getLogger(__name__)
+
 def _do_search(self, request, model):
-        self.method_check(request, allowed=['get'])
-        self.is_authenticated(request)
-        self.throttle_check(request)
 
-        # Do the query.
-        query = request.GET.get('q', '')
-        facet = request.GET.get('facet', '')
-        sqs = SearchQuerySet().models(model).auto_query(query)
-        if facet:
-            sqs = sqs.facet(facet)
-        paginator = Paginator(sqs, 20)
+    self.method_check(request, allowed=['get'])
+    self.is_authenticated(request)
+    self.throttle_check(request)
 
-        try:
-            page = paginator.page(int(request.GET.get('page', 1)))
-        except InvalidPage:
-            raise Http404("Sorry, no results on that page.")
+    # Do the query.
+    query = request.GET.get('q', '')
+    facet = request.GET.get('facet', '')
+    sqs = SearchQuerySet().models(model).auto_query(query)
+    if facet:
+        sqs = sqs.facet(facet)
+    paginator = Paginator(sqs, 20)
 
-        objects = []
+    log.info('Serving search for %s:%s' % (query, facet))
 
-        for result in page.object_list:
-            highlighter = Highlighter(query)
-            text = highlighter.highlight(result.text)
-            bundle = self.full_dehydrate(result.object)
-            bundle.data['text'] = text
-            objects.append(bundle)
+    try:
+        page = paginator.page(int(request.GET.get('page', 1)))
+    except InvalidPage:
+        raise Http404("Sorry, no results on that page.")
 
-        object_list = {
-            'objects': objects,
-        }
+    objects = []
 
-        self.log_throttled_access(request)
-        return self.create_response(request, object_list)
+    for result in page.object_list:
+        highlighter = Highlighter(query)
+        text = highlighter.highlight(result.text)
+        bundle = self.full_dehydrate(result.object)
+        bundle.data['text'] = text
+        objects.append(bundle)
+
+    object_list = {
+        'objects': objects,
+    }
+
+    self.log_throttled_access(request)
+    return self.create_response(request, object_list)
 
 class PostAuthentication(BasicAuthentication):
     def is_authenticated(self, request, **kwargs):
@@ -99,7 +105,7 @@ class UserResource(ModelResource):
 
 
 class ProjectResource(ModelResource):
-    user = fields.ForeignKey(UserResource, 'user')
+    users = fields.ToManyField(UserResource, 'users')
 
     class Meta:
         include_absolute_url = True
@@ -109,7 +115,7 @@ class ProjectResource(ModelResource):
         authorization = Authorization()
         excludes = ['use_virtualenv', 'path', 'skip', 'featured']
         filtering = {
-            "user": ALL_WITH_RELATIONS,
+            "users": ALL_WITH_RELATIONS,
             "slug": ALL_WITH_RELATIONS,
         }
 
@@ -125,7 +131,7 @@ class ProjectResource(ModelResource):
         deserialized = self.deserialize(request, request.raw_post_data, format=request.META.get('CONTENT_TYPE', 'application/json'))
 
         # Force this in an ugly way, at least should do "reverse"
-        deserialized["user"] = "/api/v1/user/%s/" % request.user.id
+        deserialized["users"] = ["/api/v1/user/%s/" % request.user.id,]
         bundle = self.build_bundle(data=dict_strip_unicode_keys(deserialized))
         self.is_valid(bundle, request)
         updated_bundle = self.obj_create(bundle, request=request)
