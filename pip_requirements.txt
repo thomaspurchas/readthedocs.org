@@ -25,3 +25,4 @@ redis
 -e git+http://github.com/nathanborror/django-registration.git#egg=django-registration
 -e git+https://github.com/toastdriven/django-tastypie.git#egg=tastypie
 
+sqlparse>=0.5.0 # not directly required, pinned by Snyk to avoid a vulnerability
